@@ -1,0 +1,3 @@
+/* Glow & Co. - Order Detail page styles (extends base.css) */
+.detail-grid{display:grid;grid-template-columns:1fr 320px;gap:24px;align-items:start}.panel h3{margin-top:22px}
+@media(max-width:900px){.detail-grid{grid-template-columns:1fr}}

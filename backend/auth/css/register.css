@@ -1,0 +1,20 @@
+/* Glow & Co. - Register page styles (extends base.css) */
+.auth{min-height:70vh;display:grid;place-items:center;padding:60px 16px;background:linear-gradient(135deg,#f6ede0,#ead9c3)}
+/* Error Message */
+.alert-error {
+    width: 100%;
+    padding: 12px 16px;
+    margin: 18px 0;
+    background-color: #fce8e6;
+    color: #9b3c32;
+    border: 1px solid #e8b8b2;
+    border-left: 4px solid #b94a48;
+    border-radius: 8px;
+    font-family: 'Jost', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 1.5;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}

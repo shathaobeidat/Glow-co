@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>
+      Product Form | Glow &amp; Co.
+    </title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&amp;family=Jost:wght@300;400;500&amp;display=swap" rel="stylesheet">
+    <!-- Shared styles (tokens, layout, components) -->
+    <link rel="stylesheet" href="css/base.css">
+    <!-- Page-specific styles -->
+    <link rel="stylesheet" href="css/admin-product-form.css">
+  </head>
+  <body class="admin">
+    <div class="admin-wrap">
+      <aside class="sidebar">
+        <a href="admin-dashboard.html" class="logo">
+          Glow
+          <span>
+            &amp;
+          </span>
+          Co.
+          <small>
+            Admin
+          </small>
+        </a>
+        <nav>
+          <a href="admin-dashboard.html">
+            Dashboard
+          </a>
+          <a href="admin-products.html" class="active">
+            Products
+          </a>
+          <a href="admin-categories.html">
+            Categories
+          </a>
+          <a href="admin-orders.html">
+            Orders
+          </a>
+        </nav>
+        <a href="index.html" class="back">
+          &larr; View storefront
+        </a>
+        <a href="login.html" class="back">
+          Log out
+        </a>
+      </aside>
+      <main class="admin-main">
+        <div class="a-head">
+          <h1>
+            Add / edit product
+          </h1>
+        </div>
+        <form class="panel form-narrow" action="#" method="post" enctype="multipart/form-data">
+          <!-- Show this alert when the PHP validation rejects a file -->
+          <div class="alert error">
+            Invalid file. Only JPG, PNG or WEBP images up to 2 MB are allowed.
+          </div>
+          <div class="field">
+            <label for="name">
+              Name
+            </label>
+            <input type="text" id="name" name="name" placeholder="Product name" required>
+          </div>
+          <div class="field">
+            <label for="description">
+              Description
+            </label>
+            <textarea id="description" name="description" rows="4" required>
+            </textarea>
+          </div>
+          <div class="two">
+            <div class="field">
+              <label for="price">
+                Price ($)
+              </label>
+              <input type="number" id="price" name="price" placeholder="0.00" step="0.01" min="0" required>
+            </div>
+            <div class="field">
+              <label for="stock">
+                Stock
+              </label>
+              <input type="number" id="stock" name="stock" placeholder="0" min="0" required>
+            </div>
+          </div>
+          <div class="field">
+            <label for="category">
+              Category
+            </label>
+            <select id="category" name="category">
+              <option>
+                Scented Candles
+              </option>
+              <option>
+                Diffusers & Essential Oils
+              </option>
+              <option>
+                Trays & Coasters
+              </option>
+              <option>
+                Gift Sets
+              </option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="image">
+              Product image
+            </label>
+            <input type="file" id="image" name="image" accept=".jpg,.jpeg,.png,.webp">
+            <small class="muted">
+              JPG, PNG or WEBP, max 2 MB. Leave empty to keep the current image.
+            </small>
+          </div>
+          <div class="preview">
+            <span class="thumb sm c1" style="background-image:url('https://unsplash.com/photos/doGw3H_MDNI/download?force=true&w=900');background-size:cover;background-position:center">
+            </span>
+            <small class="muted">
+              Current image
+            </small>
+          </div>
+          <div class="acts-row">
+            <button type="submit" class="btn">
+              Save product
+            </button>
+            <a href="admin-products.html" class="btn btn-outline">
+              Cancel
+            </a>
+          </div>
+        </form>
+      </main>
+    </div>
+  </body>
+</html>

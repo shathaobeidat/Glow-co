@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>
+      Order Detail | Glow &amp; Co.
+    </title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&amp;family=Jost:wght@300;400;500&amp;display=swap" rel="stylesheet">
+    <!-- Shared styles (tokens, layout, components) -->
+    <link rel="stylesheet" href="css/base.css">
+    <!-- Page-specific styles -->
+    <link rel="stylesheet" href="css/admin-order-detail.css">
+  </head>
+  <body class="admin">
+    <div class="admin-wrap">
+      <aside class="sidebar">
+        <a href="admin-dashboard.html" class="logo">
+          Glow
+          <span>
+            &amp;
+          </span>
+          Co.
+          <small>
+            Admin
+          </small>
+        </a>
+        <nav>
+          <a href="admin-dashboard.html">
+            Dashboard
+          </a>
+          <a href="admin-products.html">
+            Products
+          </a>
+          <a href="admin-categories.html">
+            Categories
+          </a>
+          <a href="admin-orders.html" class="active">
+            Orders
+          </a>
+        </nav>
+        <a href="index.html" class="back">
+          &larr; View storefront
+        </a>
+        <a href="login.html" class="back">
+          Log out
+        </a>
+      </aside>
+      <main class="admin-main">
+        <div class="a-head">
+          <h1>
+            Order #1044
+          </h1>
+        </div>
+        <div class="detail-grid">
+          <div class="panel">
+            <h2>
+              Ordered items
+            </h2>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>
+                      Item
+                    </th>
+                    <th>
+                      Price
+                    </th>
+                    <th>
+                      Qty
+                    </th>
+                    <th>
+                      Subtotal
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>
+                      Vanilla &amp; Lavender Candle
+                    </td>
+                    <td>
+                      $24.00
+                    </td>
+                    <td>
+                      2
+                    </td>
+                    <td>
+                      $48.00
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>
+                      Marble Coasters Set
+                    </td>
+                    <td>
+                      $35.00
+                    </td>
+                    <td>
+                      1
+                    </td>
+                    <td>
+                      $35.00
+                    </td>
+                  </tr>
+                  <tr>
+                    <td colspan="3">
+                      <strong>
+                        Total (incl. $3 delivery)
+                      </strong>
+                    </td>
+                    <td>
+                      <strong>
+                        $86.00
+                      </strong>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <h3>
+              Customer
+            </h3>
+            <p class="muted">
+              Amal Hassan
+              <br>
+              12 Rose Street, Amman
+              <br>
+              +962 7 9000 0000
+            </p>
+          </div>
+          <form class="panel" action="#" method="post">
+            <h2>
+              Update order
+            </h2>
+            <div class="field">
+              <label for="status">
+                Order status
+              </label>
+              <select id="status" name="status">
+                <option>
+                  Pending
+                </option>
+                <option>
+                  Processing
+                </option>
+                <option>
+                  Delivered
+                </option>
+                <option>
+                  Cancelled
+                </option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="payment">
+                Payment status
+              </label>
+              <select id="payment" name="payment">
+                <option>
+                  Unpaid
+                </option>
+                <option>
+                  Paid
+                </option>
+              </select>
+            </div>
+            <p class="muted">
+              Payment method: Cash on Delivery
+            </p>
+            <button type="submit" class="btn btn-block">
+              Save changes
+            </button>
+          </form>
+        </div>
+      </main>
+    </div>
+  </body>
+</html>

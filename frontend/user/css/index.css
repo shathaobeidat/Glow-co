@@ -1,0 +1,8 @@
+/* Glow & Co. - Home page styles (extends base.css) */
+.hero{background:linear-gradient(135deg,#f6ede0,#ead9c3);padding:80px 0}
+.hero-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:40px;align-items:center}
+.hero h1{font-size:clamp(2.4rem,5vw,4rem);margin:12px 0 16px}
+.hero-text p{max-width:480px;margin-bottom:28px;color:var(--muted)}
+.hero-btns{display:flex;gap:14px;flex-wrap:wrap}
+.perks{text-align:center}.perks h3{margin-bottom:6px}.perks p{color:var(--muted)}
+@media(max-width:800px){.hero-grid{grid-template-columns:1fr}}

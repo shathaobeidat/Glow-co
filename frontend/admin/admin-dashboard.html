@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>
+      Admin Dashboard | Glow &amp; Co.
+    </title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&amp;family=Jost:wght@300;400;500&amp;display=swap" rel="stylesheet">
+    <!-- Shared styles (tokens, layout, components) -->
+    <link rel="stylesheet" href="css/base.css">
+    <!-- Page-specific styles -->
+    <link rel="stylesheet" href="css/admin-dashboard.css">
+  </head>
+  <body class="admin">
+    <div class="admin-wrap">
+      <aside class="sidebar">
+        <a href="admin-dashboard.html" class="logo">
+          Glow
+          <span>
+            &amp;
+          </span>
+          Co.
+          <small>
+            Admin
+          </small>
+        </a>
+        <nav>
+          <a href="admin-dashboard.html" class="active">
+            Dashboard
+          </a>
+          <a href="admin-products.html">
+            Products
+          </a>
+          <a href="admin-categories.html">
+            Categories
+          </a>
+          <a href="admin-orders.html">
+            Orders
+          </a>
+        </nav>
+        <a href="index.html" class="back">
+          &larr; View storefront
+        </a>
+        <a href="login.html" class="back">
+          Log out
+        </a>
+      </aside>
+      <main class="admin-main">
+        <div class="a-head">
+          <h1>
+            Dashboard
+          </h1>
+        </div>
+        <div class="metrics">
+          <div class="metric">
+            <small>
+              Total revenue
+            </small>
+            <strong>
+              $4,820
+            </strong>
+          </div>
+          <div class="metric">
+            <small>
+              Orders
+            </small>
+            <strong>
+              126
+            </strong>
+          </div>
+          <div class="metric">
+            <small>
+              Products
+            </small>
+            <strong>
+              8
+            </strong>
+          </div>
+          <div class="metric">
+            <small>
+              Customers
+            </small>
+            <strong>
+              74
+            </strong>
+          </div>
+        </div>
+        <div class="panel">
+          <h2>
+            Latest orders
+          </h2>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>
+                    Order
+                  </th>
+                  <th>
+                    Customer
+                  </th>
+                  <th>
+                    Total
+                  </th>
+                  <th>
+                    Payment
+                  </th>
+                  <th>
+                    Status
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>
+                    #1044
+                  </td>
+                  <td>
+                    Amal Hassan
+                  </td>
+                  <td>
+                    $86.00
+                  </td>
+                  <td>
+                    <span class="badge warn">
+                      Unpaid
+                    </span>
+                  </td>
+                  <td>
+                    <span class="badge warn">
+                      Pending
+                    </span>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    #1043
+                  </td>
+                  <td>
+                    Omar Saleh
+                  </td>
+                  <td>
+                    $82.00
+                  </td>
+                  <td>
+                    <span class="badge ok">
+                      Paid
+                    </span>
+                  </td>
+                  <td>
+                    <span class="badge ok">
+                      Delivered
+                    </span>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </main>
+    </div>
+  </body>
+</html>

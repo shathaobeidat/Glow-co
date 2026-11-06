@@ -1,0 +1,5 @@
+/* Glow & Co. - Order Receipt page styles (extends base.css) */
+.narrow{max-width:760px}.receipt{text-align:center}.receipt h3{margin-top:24px}
+.check{width:64px;height:64px;border-radius:50%;background:var(--accent);color:#fff;font-size:2rem;display:grid;place-items:center;margin:0 auto 14px}
+.status-row{display:flex;justify-content:center;gap:32px;flex-wrap:wrap;margin:24px 0}.status-row small{display:block;color:var(--muted);margin-bottom:6px}
+.receipt .btn{margin-top:20px}.receipt table{text-align:left}

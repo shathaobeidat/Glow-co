@@ -1,0 +1,7 @@
+/* Glow & Co. - Product Detail page styles (extends base.css) */
+.detail{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:start}
+.detail-img{aspect-ratio:1;border-radius:var(--r)}
+.detail h1{margin:8px 0}.big{font-size:1.8rem;margin-bottom:14px}
+.buy{display:flex;gap:12px;align-items:end;margin:22px 0}.buy label{display:none}.buy input{width:90px}
+.specs{padding-left:18px;color:var(--muted);line-height:1.9}
+@media(max-width:800px){.detail{grid-template-columns:1fr}}

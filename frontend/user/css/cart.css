@@ -1,0 +1,4 @@
+/* Glow & Co. - Cart page styles (extends base.css) */
+.cart-grid{display:grid;grid-template-columns:1fr 340px;gap:28px;align-items:start}
+.cart-grid form .btn{margin-top:16px}
+@media(max-width:900px){.cart-grid{grid-template-columns:1fr}}

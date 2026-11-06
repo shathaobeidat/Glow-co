@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>
+      Category Form | Glow &amp; Co.
+    </title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&amp;family=Jost:wght@300;400;500&amp;display=swap" rel="stylesheet">
+    <!-- Shared styles (tokens, layout, components) -->
+    <link rel="stylesheet" href="css/base.css">
+    <!-- Page-specific styles -->
+    <link rel="stylesheet" href="css/admin-category-form.css">
+  </head>
+  <body class="admin">
+    <div class="admin-wrap">
+      <aside class="sidebar">
+        <a href="admin-dashboard.html" class="logo">
+          Glow
+          <span>
+            &amp;
+          </span>
+          Co.
+          <small>
+            Admin
+          </small>
+        </a>
+        <nav>
+          <a href="admin-dashboard.html">
+            Dashboard
+          </a>
+          <a href="admin-products.html">
+            Products
+          </a>
+          <a href="admin-categories.html" class="active">
+            Categories
+          </a>
+          <a href="admin-orders.html">
+            Orders
+          </a>
+        </nav>
+        <a href="index.html" class="back">
+          &larr; View storefront
+        </a>
+        <a href="login.html" class="back">
+          Log out
+        </a>
+      </aside>
+      <main class="admin-main">
+        <div class="a-head">
+          <h1>
+            Add / edit category
+          </h1>
+        </div>
+        <form class="panel form-narrow" action="#" method="post" enctype="multipart/form-data">
+          <div class="field">
+            <label for="name">
+              Name
+            </label>
+            <input type="text" id="name" name="name" placeholder="Category name" required>
+          </div>
+          <div class="field">
+            <label for="description">
+              Description
+            </label>
+            <textarea id="description" name="description" rows="4">
+            </textarea>
+          </div>
+          <div class="field">
+            <label for="image">
+              Category image
+            </label>
+            <input type="file" id="image" name="image" accept=".jpg,.jpeg,.png,.webp">
+            <small class="muted">
+              JPG, PNG or WEBP, max 2 MB.
+            </small>
+          </div>
+          <div class="acts-row">
+            <button type="submit" class="btn">
+              Save category
+            </button>
+            <a href="admin-categories.html" class="btn btn-outline">
+              Cancel
+            </a>
+          </div>
+        </form>
+      </main>
+    </div>
+  </body>
+</html>
