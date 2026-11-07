@@ -28,36 +28,18 @@ class UsersClass
             return false;
         }
     }
-
-    public function getProfile(int $id)
+    public function getprofile(int $id)
 {
     $dbh  = DB_conn::getConnection();
     $stmt = $dbh->prepare(
-        "SELECT u.id, u.name, u.email, u.role, u.created_at,
-                (SELECT COUNT(*) FROM orders o
-                  WHERE o.user_id = u.id
-                    AND o.deleted_at IS NULL
-                    AND o.status <> 'cancelled') AS orders_count,
-                (SELECT COALESCE(SUM(o.total), 0) FROM orders o
-                  WHERE o.user_id = u.id
-                    AND o.deleted_at IS NULL
-                    AND o.status <> 'cancelled') AS total_spent
-         FROM users u
-         WHERE u.id = ? AND u.deleted_at IS NULL"
+        "SELECT name, email, created_at
+         FROM users
+         WHERE id = ? AND deleted_at IS NULL"
     );
     $stmt->execute([$id]);
-    $row = $stmt->fetch(PDO::FETCH_ASSOC);
-
-    if (!$row) {
-        return false;
-    }
-
-    $row['orders_count'] = (int)$row['orders_count'];
-    $row['total_spent']  = (float)$row['total_spent'];
-    return $row;
+    return $stmt->fetch(PDO::FETCH_ASSOC); 
 }
-
-public function updateProfile(int $id, string $name, string $email): bool
+public function updateprofile(int $id, string $name, string $email): bool
 {
     $dbh  = DB_conn::getConnection();
     $stmt = $dbh->prepare(
@@ -67,7 +49,14 @@ public function updateProfile(int $id, string $name, string $email): bool
     return $stmt->execute([$name, $email, $id]);
 }
 
-public function getUserOrders(int $userId, int $limit = 10): array
+public function emailexists(string $email, int $excludeId = 0): bool
+{
+    $dbh  = DB_conn::getConnection();
+    $stmt = $dbh->prepare("SELECT 1 FROM users WHERE email = ? AND id <> ? LIMIT 1");
+    $stmt->execute([$email, $excludeId]);
+    return (bool) $stmt->fetchColumn();
+}
+public function getorders(int $userId, int $limit = 10): array
 {
     $dbh  = DB_conn::getConnection();
     $stmt = $dbh->prepare(
@@ -92,12 +81,4 @@ public function getUserOrders(int $userId, int $limit = 10): array
 
     return $rows;
 }
-public function emailExists(string $email, int $excludeId = 0): bool
-    {
-        $dbh  = DB_conn::getConnection();
-        $stmt = $dbh->prepare("SELECT COUNT(*) FROM users WHERE email = ? AND id <> ?");
-        $stmt->execute([$email, $excludeId]);
-        return (int)$stmt->fetchColumn() > 0;
     }
-    
-}

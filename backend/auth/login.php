@@ -28,7 +28,7 @@ if ($_SERVER['REQUEST_METHOD'] === "POST" && isset($_POST['subtn'])) {
                 header("Location: ../../frontend/User/index.php");
                 exit();
             } elseif ($user['role'] === 'admin') {
-                header("Location: ../../frontend/admin/dashboard.php");
+                header("Location: ../../frontend/admin/admin-dashboard.php");
                 exit();
             }
 

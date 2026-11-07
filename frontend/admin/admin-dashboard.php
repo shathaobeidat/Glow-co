@@ -1,3 +1,15 @@
+<?php
+require_once __DIR__ . '/../../backend/includes/admin-layout.php';
+require_once __DIR__ . '/../../backend/classes/AdminDashboardClass.php';
+require_once __DIR__ . '/../../backend/classes/AdminOrdersClass.php';
+require_once __DIR__ . '/../../backend/classes/OrdersClass.php';
+
+require_admin();
+
+$stats  = (new AdminDashboardClass())->getstats();
+$orders = (new AdminOrdersClass())->getlatest(5);
+
+?>
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -8,46 +20,12 @@
     </title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&amp;family=Jost:wght@300;400;500&amp;display=swap" rel="stylesheet">
-    <!-- Shared styles (tokens, layout, components) -->
+
     <link rel="stylesheet" href="css/base.css">
-    <!-- Page-specific styles -->
     <link rel="stylesheet" href="css/admin-dashboard.css">
   </head>
   <body class="admin">
-    <div class="admin-wrap">
-      <aside class="sidebar">
-        <a href="admin-dashboard.html" class="logo">
-          Glow
-          <span>
-            &amp;
-          </span>
-          Co.
-          <small>
-            Admin
-          </small>
-        </a>
-        <nav>
-          <a href="admin-dashboard.html" class="active">
-            Dashboard
-          </a>
-          <a href="admin-products.html">
-            Products
-          </a>
-          <a href="admin-categories.html">
-            Categories
-          </a>
-          <a href="admin-orders.html">
-            Orders
-          </a>
-        </nav>
-        <a href="index.html" class="back">
-          &larr; View storefront
-        </a>
-        <a href="login.html" class="back">
-          Log out
-        </a>
-      </aside>
-      <main class="admin-main">
+    <?php render_admin_header('dashboard'); ?>
         <div class="a-head">
           <h1>
             Dashboard
@@ -56,10 +34,10 @@
         <div class="metrics">
           <div class="metric">
             <small>
-              Total revenue
+              Paid revenue
             </small>
             <strong>
-              $4,820
+              JOD <?= number_format($stats['revenue'], 2) ?>
             </strong>
           </div>
           <div class="metric">
@@ -67,7 +45,7 @@
               Orders
             </small>
             <strong>
-              126
+              <?= (int) $stats['orders'] ?>
             </strong>
           </div>
           <div class="metric">
@@ -75,7 +53,7 @@
               Products
             </small>
             <strong>
-              8
+              <?= (int) $stats['products'] ?>
             </strong>
           </div>
           <div class="metric">
@@ -83,7 +61,7 @@
               Customers
             </small>
             <strong>
-              74
+              <?= (int) $stats['customers'] ?>
             </strong>
           </div>
         </div>
@@ -113,53 +91,43 @@
                 </tr>
               </thead>
               <tbody>
+                <?php if (empty($orders)): ?>
+                <tr>
+                  <td colspan="5">
+                    No orders yet.
+                  </td>
+                </tr>
+                <?php else: ?>
+                <?php foreach ($orders as $order): ?>
                 <tr>
                   <td>
-                    #1044
+                    <a href="admin-order-detail.php?id=<?= (int) $order['id'] ?>">
+                      #<?= (int) $order['id'] ?>
+                    </a>
                   </td>
                   <td>
-                    Amal Hassan
+                    <?= e($order['shipping_name']) ?>
                   </td>
                   <td>
-                    $86.00
+                    JOD <?= number_format($order['total'], 2) ?>
                   </td>
                   <td>
-                    <span class="badge warn">
-                      Unpaid
+                    <span class="<?= OrdersClass::badgeclass($order['payment_status']) ?>">
+                      <?= e($order['payment_status']) ?>
                     </span>
                   </td>
                   <td>
-                    <span class="badge warn">
-                      Pending
+                    <span class="<?= OrdersClass::badgeclass($order['status']) ?>">
+                      <?= e($order['status']) ?>
                     </span>
                   </td>
                 </tr>
-                <tr>
-                  <td>
-                    #1043
-                  </td>
-                  <td>
-                    Omar Saleh
-                  </td>
-                  <td>
-                    $82.00
-                  </td>
-                  <td>
-                    <span class="badge ok">
-                      Paid
-                    </span>
-                  </td>
-                  <td>
-                    <span class="badge ok">
-                      Delivered
-                    </span>
-                  </td>
-                </tr>
+                <?php endforeach; ?>
+                <?php endif; ?>
               </tbody>
             </table>
           </div>
         </div>
-      </main>
-    </div>
+    <?php render_admin_footer(); ?>
   </body>
 </html>
