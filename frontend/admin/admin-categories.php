@@ -1,11 +1,10 @@
 <?php
 require_once __DIR__ . '/../../backend/includes/admin-layout.php';
-require_once __DIR__ . '/../../backend/classes/AdminCategoriesClass.php';
-require_once __DIR__ . '/../../backend/classes/ProductsClass.php';
+require_once __DIR__ . '/../../backend/classes/CategoryClass.php';
 
 require_admin();
 
-$categoryobj = new AdminCategoriesClass();
+$categoryobj = new Category();
 $error       = '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_category'])) {
@@ -24,7 +23,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_category'])) {
 
 $saved      = isset($_GET['saved']);
 $deleted    = isset($_GET['deleted']);
-$categories = $categoryobj->getall();
+$categories = $categoryobj->getallcategories();
 
 ?>
 <!DOCTYPE html>
@@ -96,7 +95,7 @@ $categories = $categoryobj->getall();
                 <?php foreach ($categories as $cat): ?>
                 <tr>
                   <td>
-                    <span class="thumb sm"<?= ProductsClass::imagestyle($cat['image']) ?>>
+                    <span class="thumb sm"<?= image_style($cat['image']) ?>>
                     </span>
                   </td>
                   <td>
