@@ -1,13 +1,12 @@
 <?php
 require_once __DIR__ . '/../../backend/includes/admin-layout.php';
-require_once __DIR__ . '/../../backend/classes/AdminDashboardClass.php';
-require_once __DIR__ . '/../../backend/classes/AdminOrdersClass.php';
 require_once __DIR__ . '/../../backend/classes/OrdersClass.php';
 
 require_admin();
 
-$stats  = (new AdminDashboardClass())->getstats();
-$orders = (new AdminOrdersClass())->getlatest(5);
+$orderobj = new OrdersClass();
+$stats    = $orderobj->getstats();
+$orders   = $orderobj->getlatest(5);
 
 ?>
 <!DOCTYPE html>

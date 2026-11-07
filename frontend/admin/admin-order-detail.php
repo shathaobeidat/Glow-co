@@ -1,11 +1,10 @@
 <?php
 require_once __DIR__ . '/../../backend/includes/admin-layout.php';
-require_once __DIR__ . '/../../backend/classes/AdminOrdersClass.php';
 require_once __DIR__ . '/../../backend/classes/OrdersClass.php';
 
 require_admin();
 
-$orderobj = new AdminOrdersClass();
+$orderobj = new OrdersClass();
 $id       = (int) ($_GET['id'] ?? 0);
 $order    = $orderobj->getorder($id);
 
@@ -27,10 +26,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['save_order'])) {
     }
 }
 
-$updated  = isset($_GET['updated']);
-$items    = $orderobj->getorderitems($id);
-$order    = $orderobj->getorder($id);
-$locked   = $order['status'] === 'cancelled';
+$updated = isset($_GET['updated']);
+$items   = $orderobj->getorderitems($id);
+$order   = $orderobj->getorder($id);      // read again to show the new values
+$locked  = $order['status'] === 'cancelled';
 
 ?>
 <!DOCTYPE html>
@@ -151,7 +150,7 @@ $locked   = $order['status'] === 'cancelled';
                 Order status
               </label>
               <select id="status" name="status"<?= $locked ? ' disabled' : '' ?>>
-                <?php foreach (AdminOrdersClass::STATUSES as $status): ?>
+                <?php foreach (OrdersClass::STATUSES as $status): ?>
                 <option value="<?= e($status) ?>"<?= $order['status'] === $status ? ' selected' : '' ?>>
                   <?= e(ucfirst($status)) ?>
                 </option>
@@ -163,7 +162,7 @@ $locked   = $order['status'] === 'cancelled';
                 Payment status
               </label>
               <select id="payment" name="payment"<?= $locked ? ' disabled' : '' ?>>
-                <?php foreach (AdminOrdersClass::PAYMENTS as $payment): ?>
+                <?php foreach (OrdersClass::PAYMENTS as $payment): ?>
                 <option value="<?= e($payment) ?>"<?= $order['payment_status'] === $payment ? ' selected' : '' ?>>
                   <?= e(ucfirst($payment)) ?>
                 </option>

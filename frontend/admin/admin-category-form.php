@@ -1,20 +1,14 @@
 <?php
 require_once __DIR__ . '/../../backend/includes/admin-layout.php';
-require_once __DIR__ . '/../../backend/classes/AdminCategoriesClass.php';
+require_once __DIR__ . '/../../backend/classes/CategoryClass.php';
 require_once __DIR__ . '/../../backend/classes/ImageUploadClass.php';
-require_once __DIR__ . '/../../backend/classes/ProductsClass.php';
 
 require_admin();
 
-$categoryobj = new AdminCategoriesClass();
+$categoryobj = new Category();
 
-$id       = (int) ($_GET['id'] ?? 0);
-$category = $id > 0 ? $categoryobj->getone($id) : false;
-
-if ($id > 0 && !$category) {
-    header('Location: admin-categories.php');
-    exit();
-}
+$id = (int) ($_GET['id'] ?? 0);
+$category =  $categoryobj->getone($id) ;
 
 $currentImage = $category ? $category['image'] : '';
 $error        = '';
@@ -24,15 +18,14 @@ $form         = [
 ];
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['save_category'])) {
-    $form['name']        = trim($_POST['name'] ?? '');
+    $form['name']    = trim($_POST['name'] ?? '');
     $form['description'] = trim($_POST['description'] ?? '');
-
     if (!verify_csrf()) {
         $error = 'Invalid request. Please try again.';
     } elseif ($form['name'] === '') {
         $error = 'Category name is required';
-    } elseif (mb_strlen($form['name']) > 100 || mb_strlen($form['description']) > 255) {
-        $error = 'Name or description is too long';
+    } elseif (mb_strlen($form['name']) > 100) {
+        $error = 'Category name is too long';
     } else {
         try {
             $uploader = new ImageUploadClass();
@@ -40,6 +33,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['save_category'])) {
 
             if ($id > 0) {
                 $categoryobj->update($id, $form['name'], $form['description'], $newImage);
+       
                 if ($newImage !== '' && $currentImage !== '') {
                     $uploader->delete($currentImage);
                 }
@@ -51,7 +45,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['save_category'])) {
             exit();
         } catch (RuntimeException $ex) {
             $error = $ex->getMessage();
+        } catch (PDOException $ex) {
+           
+            if ($ex->getCode() === '23000') {
+                $error = 'A category with this name already exists.';
+            } else {
+                error_log($ex->getMessage());
+                $error = 'Something went wrong while saving the category. Please try again.';
+            }
         } catch (Throwable $ex) {
+            error_log($ex->getMessage());
             $error = 'Something went wrong while saving the category. Please try again.';
         }
     }
@@ -109,7 +112,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['save_category'])) {
           </div>
           <?php if ($currentImage !== ''): ?>
           <div class="preview">
-            <span class="thumb sm"<?= ProductsClass::imagestyle($currentImage) ?>>
+            <span class="thumb sm"<?= image_style($currentImage) ?>>
             </span>
             <small class="muted">
               Current image

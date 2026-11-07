@@ -1,18 +1,17 @@
 <?php
 require_once __DIR__ . '/../../backend/includes/admin-layout.php';
-require_once __DIR__ . '/../../backend/classes/AdminProductsClass.php';
-require_once __DIR__ . '/../../backend/classes/ProductsClass.php';
+require_once __DIR__ . '/../../backend/classes/ProductClass.php';
 
 require_admin();
 
-$productobj = new AdminProductsClass();
+$productobj = new Product();
 $error      = '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_product'])) {
     if (!verify_csrf()) {
         $error = 'Invalid request. Please try again.';
     } else {
-        $productobj->delete((int) ($_POST['id'] ?? 0));
+        $productobj->delete((int) ($_POST['id']));
         header('Location: admin-products.php?deleted=1');
         exit();
     }
@@ -20,7 +19,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_product'])) {
 
 $saved    = isset($_GET['saved']);
 $deleted  = isset($_GET['deleted']);
-$products = $productobj->getall();
+$products = $productobj->getproducts();
 
 ?>
 <!DOCTYPE html>
@@ -98,7 +97,7 @@ $products = $productobj->getall();
                 <?php foreach ($products as $product): ?>
                 <tr>
                   <td>
-                    <span class="thumb sm"<?= ProductsClass::imagestyle($product['image']) ?>>
+                    <span class="thumb sm"<?= image_style($product['image']) ?>>
                     </span>
                   </td>
                   <td>

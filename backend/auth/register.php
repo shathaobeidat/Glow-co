@@ -35,7 +35,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['subtn'])) {
                     $_SESSION['user_name'] = $user['name'];
                     $_SESSION['email'] = $user['email'];
                     $_SESSION['user_role'] = $user['role'];
-                    header('Location: ../../frontend/User/index.php');
+                    header('Location: ../../frontend/user/index.php');
                     exit();
                 }
             }

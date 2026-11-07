@@ -1,11 +1,11 @@
 <?php
 require_once __DIR__ . '/../../backend/includes/admin-layout.php';
-require_once __DIR__ . '/../../backend/classes/AdminOrdersClass.php';
 require_once __DIR__ . '/../../backend/classes/OrdersClass.php';
 
 require_admin();
 
-$orders = (new AdminOrdersClass())->getall();
+$orderobj = new OrdersClass();
+$orders   = $orderobj->getall();
 
 ?>
 <!DOCTYPE html>

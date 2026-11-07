@@ -1,6 +1,56 @@
+<?php
+require_once __DIR__ . '/../../backend/includes/layout.php';
+require_once __DIR__ . '/../../backend/classes/CartClass.php';
+require_once __DIR__ . '/../../backend/classes/OrdersClass.php';
 
-<?php require_once __DIR__ . '/../../backend/includes/layout.php'; ?>
+// guests must log in first
+require_login_for_checkout();
 
+$cartobj  = new Cart();
+$orderobj = new OrdersClass();
+$items    = $cartobj->getitems();
+
+if (empty($items)) {
+    header('Location: cart.php');
+    exit();
+}
+
+$sum   = $cartobj->getsummary($items);
+$error = '';
+$form  = [
+    'name'    => $_SESSION['user_name'] ?? '',
+    'phone'   => '',
+    'address' => '',
+    'city'    => '',
+    'zip'     => '',
+    'notes'   => '',
+];
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['place_order'])) {
+    foreach ($form as $key => $value) {
+        $form[$key] = trim($_POST[$key] ?? '');
+    }
+
+    if ($form['name'] === '' || $form['phone'] === '' || $form['address'] === '' || $form['city'] === '') {
+        $error = 'Please fill in all required fields';
+    } elseif (!preg_match('/^[0-9+\-\s()]{7,20}$/', $form['phone'])) {
+        $error = 'Invalid phone number';
+    } else {
+        try {
+            $orderId = $orderobj->create((int) $_SESSION['user_id'], $form, $items, $sum);
+            $cartobj->clear();
+            header('Location: order-receipt.php?id=' . $orderId);
+            exit();
+        } catch (RuntimeException $ex) {
+            $error = $ex->getMessage();
+        } catch (Throwable $ex) {
+            error_log($ex->getMessage());
+            $error = 'Something went wrong while placing your order. Please try again.';
+        }
+    }
+}
+
+?>
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -17,7 +67,7 @@
     <link rel="stylesheet" href="css/checkout.css">
   </head>
   <body class="store">
-      <?php render_header('checkout'); ?>
+    <?php render_header('cart'); ?>
     <main>
       <section class="page-head">
         <div class="container">
@@ -31,7 +81,12 @@
       </section>
       <section class="section">
         <div class="container cart-grid">
-          <form action="order-receipt.html" method="post" class="panel">
+          <form action="checkout.php" method="post" class="panel" novalidate>
+            <?php if ($error !== ''): ?>
+            <div class="alert error" role="alert">
+              <?= e($error) ?>
+            </div>
+            <?php endif; ?>
             <h2>
               Delivery details
             </h2>
@@ -40,41 +95,40 @@
                 <label for="name">
                   Full name
                 </label>
-                <input type="text" id="name" name="name" placeholder="Your name" required>
+                <input type="text" id="name" name="name" value="<?= e($form['name']) ?>" placeholder="Your name" required>
               </div>
               <div class="field">
                 <label for="phone">
                   Phone
                 </label>
-                <input type="tel" id="phone" name="phone" placeholder="+962 ..." required>
+                <input type="tel" id="phone" name="phone" value="<?= e($form['phone']) ?>" placeholder="+962 ..." required>
               </div>
             </div>
             <div class="field">
               <label for="address">
                 Street address
               </label>
-              <input type="text" id="address" name="address" placeholder="Street, building, apartment" required>
+              <input type="text" id="address" name="address" value="<?= e($form['address']) ?>" placeholder="Street, building, apartment" required>
             </div>
             <div class="two">
               <div class="field">
                 <label for="city">
                   City
                 </label>
-                <input type="text" id="city" name="city" placeholder="City" required>
+                <input type="text" id="city" name="city" value="<?= e($form['city']) ?>" placeholder="City" required>
               </div>
               <div class="field">
                 <label for="zip">
                   Postal code
                 </label>
-                <input type="text" id="zip" name="zip" placeholder="Optional" >
+                <input type="text" id="zip" name="zip" value="<?= e($form['zip']) ?>" placeholder="Optional">
               </div>
             </div>
             <div class="field">
               <label for="notes">
                 Order notes
               </label>
-              <textarea id="notes" name="notes" rows="3" placeholder="Anything we should know?">
-              </textarea>
+              <textarea id="notes" name="notes" rows="3" placeholder="Anything we should know?"><?= e($form['notes']) ?></textarea>
             </div>
             <h2>
               Payment method
@@ -90,7 +144,7 @@
                 </small>
               </span>
             </label>
-            <button type="submit" class="btn btn-block">
+            <button type="submit" name="place_order" class="btn btn-block">
               Place order
             </button>
           </form>
@@ -98,28 +152,22 @@
             <h2>
               Your order
             </h2>
+            <?php foreach ($items as $it): ?>
             <div class="line">
               <span>
-                Vanilla &amp; Lavender Candle &times; 2
+                <?= e($it['name']) ?> &times; <?= $it['qty'] ?>
               </span>
               <span>
-                $48.00
+                <?= money($it['subtotal']) ?>
               </span>
             </div>
-            <div class="line">
-              <span>
-                Marble Coasters Set &times; 1
-              </span>
-              <span>
-                $35.00
-              </span>
-            </div>
+            <?php endforeach; ?>
             <div class="line">
               <span>
                 Delivery
               </span>
               <span>
-                $3.00
+                <?= money($sum['delivery']) ?>
               </span>
             </div>
             <div class="line total">
@@ -127,13 +175,13 @@
                 Total
               </span>
               <span>
-                $86.00
+                <?= money($sum['total']) ?>
               </span>
             </div>
           </aside>
         </div>
       </section>
     </main>
-     <?php render_footer(); ?>
+    <?php render_footer(); ?>
   </body>
 </html>

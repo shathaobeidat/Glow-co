@@ -1,11 +1,28 @@
-<?php require_once __DIR__ . '/../../backend/includes/layout.php'; ?>
+<?php
+require_once __DIR__ . '/../../backend/includes/layout.php';
+require_once __DIR__ . '/../../backend/classes/OrdersClass.php';
+
+if (!is_logged_in()) {
+    header('Location: ' . SITE_URL . '/backend/auth/login.php');
+    exit();
+}
+
+$orderobj = new OrdersClass();
+$order    = $orderobj->getuserorder((int) ($_GET['id'] ?? 0), (int) $_SESSION['user_id']);
+
+if (!$order) {
+    header('Location: profile.php');
+    exit();
+}
+
+?>
 <!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>
-      Order Receipt | Glow &amp; Co.
+      Order receipt | Glow &amp; Co.
     </title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&amp;family=Jost:wght@300;400;500&amp;display=swap" rel="stylesheet">
@@ -15,7 +32,7 @@
     <link rel="stylesheet" href="css/order-receipt.css">
   </head>
   <body class="store">
-         <?php render_header('order-receipt'); ?>
+    <?php render_header('profile'); ?>
     <main>
       <section class="section">
         <div class="container narrow">
@@ -27,7 +44,7 @@
               Thank you, your order is placed!
             </h1>
             <p class="muted">
-              Order #1044 &bull; 05 Nov 2026
+              Order #<?= (int) $order['id'] ?> &bull; <?= e(date('d M Y', strtotime($order['created_at']))) ?>
             </p>
             <div class="status-row">
               <div>
@@ -35,23 +52,15 @@
                   Payment method
                 </small>
                 <span class="badge">
-                  COD
-                </span>
-              </div>
-              <div>
-                <small>
-                  Payment status
-                </small>
-                <span class="badge warn">
-                  Unpaid
+                  <?= e(strtoupper($order['payment_method'])) ?>
                 </span>
               </div>
               <div>
                 <small>
                   Order status
                 </small>
-                <span class="badge warn">
-                  Pending
+                <span class="<?= OrdersClass::badgeclass($order['status']) ?>">
+                  <?= e(ucfirst($order['status'])) ?>
                 </span>
               </div>
             </div>
@@ -74,42 +83,28 @@
                   </tr>
                 </thead>
                 <tbody>
+                  <?php foreach ($order['items'] as $it): ?>
                   <tr>
                     <td>
-                      Vanilla &amp; Lavender Candle
+                      <?= e($it['name']) ?>
                     </td>
                     <td>
-                      $24.00
+                      <?= money((float) $it['price']) ?>
                     </td>
                     <td>
-                      2
+                      <?= (int) $it['qty'] ?>
                     </td>
                     <td>
-                      $48.00
+                      <?= money((float) $it['subtotal']) ?>
                     </td>
                   </tr>
-                  <tr>
-                    <td>
-                      Marble Coasters Set
-                    </td>
-                    <td>
-                      $35.00
-                    </td>
-                    <td>
-                      1
-                    </td>
-                    <td>
-                      $35.00
-                    </td>
-                  </tr>
+                  <?php endforeach; ?>
                   <tr>
                     <td colspan="3">
-                      <strong>
-                        Delivery
-                      </strong>
+                      Delivery
                     </td>
                     <td>
-                      $3.00
+                      <?= money((float) $order['delivery_fee']) ?>
                     </td>
                   </tr>
                   <tr>
@@ -120,7 +115,7 @@
                     </td>
                     <td>
                       <strong>
-                        $86.00
+                        <?= money((float) $order['total']) ?>
                       </strong>
                     </td>
                   </tr>
@@ -131,15 +126,17 @@
               Delivering to
             </h3>
             <p class="muted">
-              Amal Hassan, 12 Rose Street, Amman &bull; +962 7 9000 0000
+              <?= e($order['shipping_name']) ?>, <?= e($order['shipping_address']) ?>, <?= e($order['shipping_city']) ?> &bull; <?= e($order['shipping_phone']) ?>
             </p>
-            <a href="products.html" class="btn">
-              Continue shopping
-            </a>
+            <p>
+              <a href="products.php" class="btn">
+                Continue shopping
+              </a>
+            </p>
           </div>
         </div>
       </section>
     </main>
-   <?php render_footer(); ?>
+    <?php render_footer(); ?>
   </body>
 </html>

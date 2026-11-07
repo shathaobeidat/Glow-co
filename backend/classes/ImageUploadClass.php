@@ -1,19 +1,8 @@
 <?php
+// Saves an uploaded image inside /uploads/<folder>/ and returns its path
+// (example: "uploads/products/ab12cd34.jpg"). Returns '' if no file was chosen.
 class ImageUploadClass
 {
-    private const MAX_SIZE = 2097152;
-    private const ALLOWED  = [
-        'image/jpeg' => 'jpg',
-        'image/png'  => 'png',
-        'image/webp' => 'webp',
-    ];
-    private const FOLDERS  = ['products', 'categories'];
-
-    private function uploadsroot(): string
-    {
-        return dirname(__DIR__, 2) . '/uploads';
-    }
-
     public function save(array $file, string $folder): string
     {
         $error = $file['error'] ?? UPLOAD_ERR_NO_FILE;
@@ -23,46 +12,43 @@ class ImageUploadClass
 
         $invalid = 'Invalid file. Only JPG, PNG or WEBP images up to 2 MB are allowed.';
 
-        if (!in_array($folder, self::FOLDERS, true)
-            || $error !== UPLOAD_ERR_OK
-            || ($file['size'] ?? 0) > self::MAX_SIZE
-            || !is_uploaded_file($file['tmp_name'] ?? '')
-        ) {
+        if ($error !== UPLOAD_ERR_OK || $file['size'] > 2 * 1024 * 1024) {
             throw new RuntimeException($invalid);
         }
 
+        $allowed = [
+            'image/jpeg' => 'jpg',
+            'image/png'  => 'png',
+            'image/webp' => 'webp',
+        ];
         $finfo = new finfo(FILEINFO_MIME_TYPE);
         $mime  = $finfo->file($file['tmp_name']);
-        if (!isset(self::ALLOWED[$mime]) || @getimagesize($file['tmp_name']) === false) {
+        if (!isset($allowed[$mime])) {
             throw new RuntimeException($invalid);
         }
 
-        $dir = $this->uploadsroot() . '/' . $folder;
+        $dir = dirname(__DIR__, 2) . '/uploads/' . $folder;
         if (!is_dir($dir) && !mkdir($dir, 0755, true)) {
             throw new RuntimeException('Could not save the image on the server.');
         }
 
-        $name = bin2hex(random_bytes(8)) . '.' . self::ALLOWED[$mime];
+        $name = bin2hex(random_bytes(8)) . '.' . $allowed[$mime];
         if (!move_uploaded_file($file['tmp_name'], $dir . '/' . $name)) {
             throw new RuntimeException('Could not save the image on the server.');
         }
 
-        $base = defined('SITE_URL') ? SITE_URL : '';
-        return $base . '/uploads/' . $folder . '/' . $name;
+        return 'uploads/' . $folder . '/' . $name;
     }
 
-    public function delete(string $url): void
+
+    public function delete(string $path): void
     {
-        $pos = strpos($url, '/uploads/');
-        if ($pos === false) {
+        if (strpos($path, 'uploads/') !== 0 || strpos($path, '..') !== false) {
             return;
         }
-
-        $root = realpath($this->uploadsroot());
-        $path = realpath(dirname(__DIR__, 2) . substr($url, $pos));
-
-        if ($root !== false && $path !== false && strpos($path, $root) === 0 && is_file($path)) {
-            unlink($path);
+        $file = dirname(__DIR__, 2) . '/' . $path;
+        if (is_file($file)) {
+            unlink($file);
         }
     }
 }

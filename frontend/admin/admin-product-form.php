@@ -1,19 +1,19 @@
 <?php
 require_once __DIR__ . '/../../backend/includes/admin-layout.php';
-require_once __DIR__ . '/../../backend/classes/AdminProductsClass.php';
-require_once __DIR__ . '/../../backend/classes/AdminCategoriesClass.php';
+require_once __DIR__ . '/../../backend/classes/ProductClass.php';
+require_once __DIR__ . '/../../backend/classes/CategoryClass.php';
 require_once __DIR__ . '/../../backend/classes/ImageUploadClass.php';
-require_once __DIR__ . '/../../backend/classes/ProductsClass.php';
 
 require_admin();
 
-$productobj  = new AdminProductsClass();
-$categoryobj = new AdminCategoriesClass();
-$categories  = $categoryobj->getall();
+$productobj  = new Product();
+$categoryobj = new Category();
+$categories  = $categoryobj->getallcategories();
 
 $id      = (int) ($_GET['id'] ?? 0);
 $product = $id > 0 ? $productobj->getone($id) : false;
 
+// editing a product that does not exist
 if ($id > 0 && !$product) {
     header('Location: admin-products.php');
     exit();
@@ -55,6 +55,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['save_product'])) {
 
             if ($id > 0) {
                 $productobj->update($id, $form['category_id'], $form['name'], $form['description'], (float) $form['price'], (int) $form['stock'], $newImage);
+                // a new image was uploaded -> remove the old file
                 if ($newImage !== '' && $currentImage !== '') {
                     $uploader->delete($currentImage);
                 }
@@ -67,6 +68,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['save_product'])) {
         } catch (RuntimeException $ex) {
             $error = $ex->getMessage();
         } catch (Throwable $ex) {
+            error_log($ex->getMessage());
             $error = 'Something went wrong while saving the product. Please try again.';
         }
     }
@@ -153,7 +155,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['save_product'])) {
           </div>
           <?php if ($currentImage !== ''): ?>
           <div class="preview">
-            <span class="thumb sm"<?= ProductsClass::imagestyle($currentImage) ?>>
+            <span class="thumb sm"<?= image_style($currentImage) ?>>
             </span>
             <small class="muted">
               Current image

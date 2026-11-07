@@ -25,7 +25,10 @@ if ($_SERVER['REQUEST_METHOD'] === "POST" && isset($_POST['subtn'])) {
             $_SESSION['user_role'] = $user['role'];
 
             if ($user['role'] === 'customer') {
-                header("Location: ../../frontend/User/index.php");
+                // guest came from checkout -> send him back there
+                $redirect = $_SESSION['redirect_after_login'] ?? '../../frontend/user/index.php';
+                unset($_SESSION['redirect_after_login']);
+                header("Location: " . $redirect);
                 exit();
             } elseif ($user['role'] === 'admin') {
                 header("Location: ../../frontend/admin/admin-dashboard.php");

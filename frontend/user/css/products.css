@@ -1,3 +1,18 @@
 /* Glow & Co. - Shop page styles (extends base.css) */
-.filters{display:grid;grid-template-columns:1fr 240px auto;gap:12px;margin-bottom:36px}
+.filters{display:grid;grid-template-columns:1fr 240px auto;gap:12px;margin-bottom:18px}
 @media(max-width:700px){.filters{grid-template-columns:1fr}}
+
+.results-bar{display:flex;justify-content:space-between;align-items:center;margin-bottom:24px;font-size:.92rem}
+.clear-link{color:var(--accent-dark);text-decoration:underline}
+
+.add-form{margin:0}
+.card h3 a{color:inherit}
+.card h3 a:hover{color:var(--accent)}
+
+.empty-state{text-align:center;padding:60px 20px;background:#fff;border-radius:var(--r);box-shadow:var(--shadow)}
+.empty-state p{color:var(--muted);margin-bottom:18px;font-size:1.05rem}
+
+.pagination{display:flex;justify-content:center;flex-wrap:wrap;gap:8px;margin-top:44px}
+.pagination .pg{min-width:42px;padding:8px 14px;text-align:center;border:1.5px solid var(--line);border-radius:40px;background:#fff;font-size:.92rem}
+.pagination .pg:hover{border-color:var(--accent)}
+.pagination .pg.current{background:var(--accent);border-color:var(--accent);color:#fff}

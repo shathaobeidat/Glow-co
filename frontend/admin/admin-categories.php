@@ -8,7 +8,7 @@ $categoryobj = new Category();
 $error       = '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_category'])) {
-    $deleteId = (int) ($_POST['id'] ?? 0);
+    $deleteId = (int) ($_POST['id'] );
 
     if (!verify_csrf()) {
         $error = 'Invalid request. Please try again.';

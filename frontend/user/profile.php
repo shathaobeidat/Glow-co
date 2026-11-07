@@ -38,6 +38,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['save_profile'])) {
 $editing =  isset($_GET['edit']);
 $updated = isset($_GET['updated']);
 $orders  = $userobj->getorders($userid, 10);
+$statusClass = [
+    'pending'   => 'badge warn',
+    'delivered' => 'badge ok',
+    'cancelled' => 'badge',
+];
 
 ?>
 <!DOCTYPE html>

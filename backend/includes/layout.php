@@ -56,6 +56,72 @@ function require_login_for_checkout(): void
     }
 }
 
+/* ---------- Shared view helpers (used by cart, products, product-detail...) ---------- */
+if (!function_exists('money')) {
+    function money($amount): string
+    {
+        return 'JOD ' . number_format((float) $amount, 2);
+    }
+}
+
+if (!function_exists('image_style')) {
+    /**
+     * Returns an inline style attribute for a product image, or '' if none.
+     * Accepts: full URL (http/https), a path containing "/" (relative to site root),
+     * or a bare filename (looked up in /uploads/).
+     */
+    function image_style($image): string
+    {
+        $image = trim((string) $image);
+        if ($image === '') {
+            return '';
+        }
+        if (preg_match('#^https?://#i', $image)) {
+            $url = $image;
+        } elseif (strpos($image, '/') !== false) {
+            $url = SITE_URL . '/' . ltrim($image, '/');
+        } else {
+            $url = SITE_URL . '/uploads/' . rawurlencode($image);
+        }
+        $url = str_replace(["'", '"', '(', ')'], ['%27', '%22', '%28', '%29'], $url);
+        return ' style="background-image:url(\'' . e($url) . '\');background-size:cover;background-position:center"';
+    }
+}
+
+if (!function_exists('render_product_card')) {
+    function render_product_card(array $p): void
+    {
+        $id    = (int) $p['id'];
+        $name  = (string) $p['name'];
+        $cat   = (string) ($p['category_name'] ?? '');
+        $stock = (int) $p['stock'];
+        ?>
+        <article class="card">
+          <a href="product-detail.php?id=<?= $id ?>" class="thumb c<?= (($id - 1) % 8) + 1 ?>" aria-label="<?= e($name) ?>"<?= image_style($p['image'] ?? '') ?>></a>
+          <div class="card-body">
+            <?php if ($cat !== ''): ?>
+            <span class="tag"><?= e($cat) ?></span>
+            <?php endif; ?>
+            <h3><a href="product-detail.php?id=<?= $id ?>"><?= e($name) ?></a></h3>
+            <div class="card-foot">
+              <span class="price"><?= money($p['price']) ?></span>
+              <?php if ($stock > 0): ?>
+              <form action="cart.php" method="post" class="add-form">
+                <input type="hidden" name="action" value="add">
+                <input type="hidden" name="product_id" value="<?= $id ?>">
+                <input type="hidden" name="qty" value="1">
+                <button type="submit" class="btn btn-sm">Add to cart</button>
+              </form>
+              <?php else: ?>
+              <span class="badge warn">Out of stock</span>
+              <?php endif; ?>
+            </div>
+          </div>
+        </article>
+        <?php
+    }
+}
+
 /* ---------- Header ---------- */
 function render_header(string $active = ''): void
 {
